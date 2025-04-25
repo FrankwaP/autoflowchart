@@ -1,7 +1,7 @@
 # autoflowchart
 R package to help you build flowcharts on R for data management or cohort follow up.
 
-![](/tests/testthat/test-flowchart.svg]
+![](/tests/testthat/test-flowchart.svg)
 
 To use it, download this repo then use: `devtool::load_all(LOCAL_PATH_TO_THE_REPO)`
 
