@@ -3,7 +3,9 @@ R package to help you build flowcharts on R for data management or cohort follow
 
 ![](/tests/testthat/test-flowchart.svg)
 
-To use it, download this repo then use: `devtool::load_all(LOCAL_PATH_TO_THE_REPO)`
+To use it, download this repo then use: 
+- install it using `devtools::install_github("https://github.com/FrankwaP/autoflowchart")`
+- or clone this repo and use `devtool::load_all("LOCAL_PATH_TO_THE_REPO")` (easier to debug or add modifications).
 
 It writes down a [Graphviz](https://graphviz.org/) .dot file and call Graphviz.  
 So it must be installed and the `dot` command must exist in your system's `PATH`.
