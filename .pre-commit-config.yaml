@@ -1,0 +1,87 @@
+# All available hooks: https://pre-commit.com/hooks.html
+# R specific hooks: https://github.com/lorenzwalthert/precommit
+fail_fast: true
+repos:
+# officials hooks mixed with R precommit modifications
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+        exclude: '\.Rd'
+    -   id: trailing-whitespace
+        exclude: README.md  # auto-generated
+    -   id: check-added-large-files
+        args: ['--maxkb=200']
+        exclude: renv.lock
+    -   id: check-executables-have-shebangs
+    -   id: mixed-line-ending
+        args: [--fix=lf]
+    -   id: no-commit-to-branch
+        args: [--branch, staging, --branch, main]
+    -   id: file-contents-sorter
+        files: '^\.Rbuildignore$'
+# R formating
+-   repo: local
+    hooks:
+    -   id: airformat
+        name: airformat
+        entry: air format
+        language: system
+        types: [r]
+        pass_filenames: true
+#  R precommit hooks
+-   repo: https://github.com/lorenzwalthert/precommit    #  R precommit hooks
+    rev: v0.4.3.9009
+    hooks:
+    -   id: roxygenize
+        stages: [pre-merge-commit]
+        additional_dependencies:
+        - lcmm
+        - reticulate
+        - devtools
+        - htmltools
+        - ggplot2
+    # codemeta must be above use-tidy-description when both are used
+    # -   id: codemeta-description-updated
+    -   id: use-tidy-description
+    -   id: lintr
+    # -   id: readme-rmd-rendered  # automated with vignette
+    -   id: parsable-R
+    -   id: no-browser-statement
+    -   id: no-print-statement
+        exclude: renv/activate.R
+    -   id: no-debug-statement
+    -   id: deps-in-desc
+    -   id: pkgdown
+-   repo: https://github.com/pre-commit-ci/pre-commit-ci-config
+    rev: v1.6.1
+    hooks:
+    # Only required when https://pre-commit.ci is used for config validation
+    -   id: check-pre-commit-ci-config
+-   repo: local
+    hooks:
+    -   id: forbid-to-commit
+        name: Don't commit common R artifacts
+        entry: Cannot commit .Rhistory, .RData, .Rds or .rds.
+        language: fail
+        files: '\.(Rhistory|RData|Rds|rds)$'
+        # `exclude: <regex>` to allow committing specific files
+# R testing
+-   repo: local
+    hooks:
+    -   id: Rtesting
+        name: Rtesting
+        entry: Rscript tests/precommit_testthat.R
+        language: system
+        files: .*\.(?:R|Rmd|rda|py)
+        pass_filenames: false
+-   repo: local
+    hooks:
+    -   id: vignette
+        name: vignette
+        stages: [pre-merge-commit]
+        entry: Rscript tests/precommit_vignette.R
+        language: system
+        files: .*\.(?:R|Rmd|rda)
+        pass_filenames: false
