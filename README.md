@@ -23,4 +23,3 @@ The summaries are obtained using functions which:
 Some functions are already coded, but you can defined yours as long as they respect these constraints.
 
 Please see the (very basic) test file for an example.
-

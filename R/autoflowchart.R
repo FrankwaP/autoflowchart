@@ -1,11 +1,10 @@
 .dot_subgraphs <- function(texts, prefix, edge_style) {
   output <- c()
   step_list <- c()
-  for (inode in 1:length(texts)) {
+  for (inode in seq_along(texts)) {
     step_name <- sprintf("%s%d", prefix, inode)
     step_list <- c(step_list, step_name)
     node_text <- texts[inode]
-    # node_text <- stringr::str_wrap(node_text, width = 50, indent = 5)
     output <- c(
       output,
       sprintf("%s[label=\"%s\"]", step_name, node_text)
@@ -26,7 +25,7 @@
 
 .dot_vertical_alignment <- function(sides_texts, nodes_prefix, sides_prefix) {
   output <- c()
-  for (iside in 1:length(sides_texts)) {
+  for (iside in seq_along(sides_texts)) {
     node_name <- sprintf("%s%d", nodes_prefix, iside)
     side_name <- sprintf("%s%d", sides_prefix, iside)
     output <- c(
@@ -63,6 +62,7 @@
   writeLines(dot_string, tmp_dot)
   command <- sprintf("dot -Tsvg %s -o %s", tmp_dot, svg_file)
   system(command)
+  return()
 }
 
 
@@ -90,7 +90,7 @@ make_flowchart <- function(
   stopifnot(is.character(output_svg_file))
   #
   nodes_texts <- c()
-  for (i in 1:(length(list_summary_func))) {
+  for (i in seq_along(list_summary_func)) {
     summary_func <- list_summary_func[[i]]
     # storing df into environment to use them with .filter_args_and_call
     df <- list_df[[i]]
@@ -99,7 +99,7 @@ make_flowchart <- function(
   }
   #
   edges_texts <- c()
-  for (i in 1:(length(list_comparison_func))) {
+  for (i in seq_along(list_comparison_func)) {
     comp_func <- list_comparison_func[[i]]
     # storing df1 and df2 into environment to use them with .filter_args_and_call
     df1 <- list_df[[i]]
@@ -110,4 +110,5 @@ make_flowchart <- function(
   #
   dot_string <- .dot_string(nodes_texts, edges_texts)
   .execute_dot_string(dot_string, output_svg_file)
+  return()
 }

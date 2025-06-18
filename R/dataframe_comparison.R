@@ -1,13 +1,13 @@
 # utils ----
 .wrapped_print <- function(...) {
-  Nlines_max <- 2
+  n_lines_max <- 2
   out <- paste(..., sep = ":", collapse = ", ")
   out <- strwrap(out, 40, exdent = 2)
-  if (length(out) > Nlines_max) {
-    out <- out[1:Nlines_max]
-    out[Nlines_max] <- paste0(out[Nlines_max], ' ...')
+  if (length(out) > n_lines_max) {
+    out <- out[1:n_lines_max]
+    out[n_lines_max] <- paste0(out[n_lines_max], " ...")
   }
-  out <- paste(out, collapse = '\n')
+  out <- paste(out, collapse = "\n")
   return(out)
 }
 
@@ -55,7 +55,7 @@
   sdiff <- setdiff(func_arg_names, names(env_list))
   if (length(sdiff)) {
     stop(sprintf(
-      'The following arguments names are not supposed to be used: %s',
+      "The following arguments names are not supposed to be used: %s",
       sdiff
     ))
   }
@@ -85,7 +85,7 @@ list_removed_columns <- function(df1, df2) {
   diff <- setdiff(names(df1), names(df2))
   if (length(diff)) {
     return(sprintf(
-      '%d columns removed:\n%s\n',
+      "%d columns removed:\n%s\n",
       length(diff),
       .print_character_vector(diff)
     ))
@@ -95,10 +95,11 @@ list_removed_columns <- function(df1, df2) {
 # subject modifications ----
 list_removed_subjects <- function(df1, df2, subject) {
   stopifnot(subject %in% names(df1))
+  stopifnot(subject %in% names(df2))
   diff <- setdiff(df1[, subject], df2[, subject])
   if (length(diff)) {
     return(sprintf(
-      '%d subjects removed:\n%s\n',
+      "%d subjects removed:\n%s\n",
       length(diff),
       .print_character_vector(diff)
     ))
@@ -111,7 +112,7 @@ list_removed_observations <- function(df1, df2) {
   diff <- setdiff(rownames(df1), rownames(df2))
   if (length(diff)) {
     return(sprintf(
-      '%d observations removed\n',
+      "%d observations removed\n",
       length(diff)
     ))
   }
@@ -130,9 +131,11 @@ count_na_removed_observations <- function(df1, df2) {
 
 # values modifications ----
 
-.which_modified_values_as_na <- function(df1, df2) {
+.which_modif_vals_as_na <- function(df1, df2) {
+  stopifnot(all(colnames(df2) %in% colnames(df1)))
+  stopifnot(all(rownames(df2) %in% rownames(df1)))
   df_diff <- df1
-  df_diff[,] <- FALSE
+  df_diff[,] <- FALSE # nolint
   # values changed
   rn <- rownames(df2)
   cn <- colnames(df2)
@@ -141,9 +144,11 @@ count_na_removed_observations <- function(df1, df2) {
   return(df_diff)
 }
 
-.which_modified_values_as_value <- function(df1, df2) {
+.which_modif_vals_as_vals <- function(df1, df2) {
+  stopifnot(all(colnames(df2) %in% colnames(df1)))
+  stopifnot(all(rownames(df2) %in% rownames(df1)))
   df_diff <- df1
-  df_diff[,] <- FALSE
+  df_diff[,] <- FALSE # nolint
   # values changed
   rn <- rownames(df2)
   cn <- colnames(df2)
@@ -154,7 +159,7 @@ count_na_removed_observations <- function(df1, df2) {
 
 
 list_outliers_as_na <- function(df1, df2) {
-  df_diff <- .which_modified_values_as_na(df1, df2)
+  df_diff <- .which_modif_vals_as_na(df1, df2)
   sum_diff <- colSums(df_diff)
   col_diff <- names(sum_diff[sum_diff != 0])
   if (length(col_diff)) {
@@ -171,13 +176,13 @@ list_outliers_as_na <- function(df1, df2) {
         output <- c(output, sprintf("\t%s: %s", col, str_changed))
       }
     }
-    return(paste(output, collapse = '\n'))
+    return(paste(output, collapse = "\n"))
   }
 }
 
 # stats about modifications
 count_outliers_as_na <- function(df1, df2) {
-  df_diff <- .which_modified_values_as_na(df1, df2)
+  df_diff <- .which_modif_vals_as_na(df1, df2)
   out <- colSums(df_diff)
   out <- out[out != 0]
   return(sprintf("NA values: \n%s", .print_numeric_vector(out)))
