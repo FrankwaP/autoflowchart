@@ -68,14 +68,7 @@ make_flowchart(
   time = "Time",
   output_svg_file = "test-flowchart.svg"
 )
-```
-
-``` r
 knitr::include_graphics("test-flowchart.svg")
 ```
-
-    #> [1] "test-flowchart.svg"
-
-<img src="test-flowchart.svg" width="100%" />
 
 <img src="vignettes/test-flowchart.svg" width="100%" />

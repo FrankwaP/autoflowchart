@@ -88,7 +88,15 @@ make_flowchart(
   time = "Time",
   output_svg_file = "test-flowchart.svg"
 )
+```
 
-
+```{r, eval=FALSE}
 knitr::include_graphics("test-flowchart.svg")
+```
+
+```{r, echo=FALSE}
+# to avoid a problem with README.Rmd which calls this vignette
+if (!"IAMREADME" %in% names(environment())) {
+  knitr::include_graphics("test-flowchart.svg")
+}
 ```

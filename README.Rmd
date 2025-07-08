@@ -13,7 +13,12 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r child = 'vignettes/autoflowchart.Rmd'}
+```{r echo=FALSE, results='asis'}
+# adding "IAMREADME" to environment so the vignette knows it is called as a children
+IAMREADME <- NULL
+cat(
+  knitr::knit_child("vignettes/autoflowchart.Rmd", envir = environment(), quiet = TRUE)
+)
 ```
 
 
