@@ -17,8 +17,8 @@ It considers:
 The summaries are obtained using functions which:
  - return a string or `NULL`
  - uses specific arguments:
-  - for the datasets summaries: `df` and optionally `subject` and `time`
-  - for the modifications summaries: `df1`, `df2` and optionally `subject` and `time`
+   - for the datasets summaries: `df` and optionally `subject` and `time`
+   - for the modifications summaries: `df1`, `df2` and optionally `subject` and `time`
 
 Some functions are already coded, but you can defined yours as long as they respect these constraints.
 
