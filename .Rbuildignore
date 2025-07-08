@@ -1,2 +1,5 @@
 ^.*\.Rproj$
+^Meta$
+^README\.Rmd$
 ^\.Rproj\.user$
+^doc$
