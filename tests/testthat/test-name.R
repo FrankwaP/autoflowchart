@@ -32,4 +32,5 @@ test_that("basic workflow", {
     time = "Time",
     output_svg_file = "test-flowchart.svg"
   )
+  file.remove("test-flowchart.svg")
 })

@@ -15,3 +15,8 @@ knitr::opts_chunk$set(
 
 ```{r child = 'vignettes/autoflowchart.Rmd'}
 ```
+
+
+```{r echo=FALSE}
+knitr::include_graphics("vignettes/test-flowchart.svg")
+```

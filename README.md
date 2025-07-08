@@ -1,10 +1,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-``` r
-library(autoflowchart)
-```
-
 `autoflowchart` is a R package to help you build flowcharts for data
 management or cohort follow up.
 
@@ -14,9 +10,8 @@ or clone this repo and use `devtool::load_all("LOCAL_PATH_TO_THE_REPO")`
 (easier to debug or add modifications).
 
 It writes down a [Graphviz](https://graphviz.org/) .dot file and call
-Graphviz.  
-So it must be installed and the `dot` command must exist in your
-system’s `PATH`.
+Graphviz. So it must be installed and the `dot` command must exist in
+your system’s `PATH`.
 
 It considers: - the main branch, for which summaries of the datasets at
 each step are displayed - the side nodes, for which summaries of the
@@ -33,17 +28,19 @@ they respect these constraints.
 Here is a basic example:
 
 ``` r
-# original dataset ----
+# example of data-management ----
+
+## original dataset ----
 data0 <- ChickWeight
 
-# removing "outliers" ----
+## removing "outliers" ----
 data1 <- data0
 idx <- (data1[["weight"]] < 50) | (data1[["weight"]] > 300)
 data1[idx, "weight"] <- NA
 # creating the task
 task1 <- list_outliers_as_na
 
-# remove incomplete observations ----
+## remove incomplete observations ----
 data2 <- data1
 data2 <- data2[complete.cases(data2), ]
 # creating the task
@@ -53,7 +50,7 @@ task2 <- combine_func(
   count_na_removed_observations
 )
 
-# function to summarize the information of a dataset
+## function to summarize the information of a dataset
 summarize <- function(df) {
   n_ind <- length(unique(df$ID))
   n_row <- nrow(df)
@@ -62,6 +59,7 @@ summarize <- function(df) {
   return(output)
 }
 
+# Generating the flowchart
 make_flowchart(
   list_df = list(data0, data1, data2),
   list_summary_func = list(summarize, summarize, summarize),
@@ -70,12 +68,11 @@ make_flowchart(
   time = "Time",
   output_svg_file = "test-flowchart.svg"
 )
-#> NULL
+
+
+knitr::include_graphics("test-flowchart.svg")
 ```
 
-![](test-flowchart.svg)
+<img src="test-flowchart.svg" width="100%" />
 
-``` r
-file.remove("test-flowchart.svg")
-#> [1] TRUE
-```
+<img src="vignettes/test-flowchart.svg" width="100%" />
