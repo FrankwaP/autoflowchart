@@ -74,6 +74,8 @@ make_flowchart <- function(
   time = NULL,
   output_svg_file
 ) {
+  # NOTE: I trued using rasterImage and grid::grid.raster but it was
+  #       too difficult rendering with good quality
   stopifnot(is.list(list_df))
   stopifnot(all(sapply(list_df, is.data.frame)))
   #
@@ -110,5 +112,5 @@ make_flowchart <- function(
   #
   dot_string <- .dot_string(nodes_texts, edges_texts)
   .execute_dot_string(dot_string, output_svg_file)
-  return()
+  return(invisible())
 }
