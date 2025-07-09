@@ -70,6 +70,7 @@ make_flowchart <- function(
   list_df,
   list_summary_func,
   list_comparison_func,
+  list_comparison_title,
   subject = NULL,
   time = NULL,
   output_svg_file
@@ -84,8 +85,12 @@ make_flowchart <- function(
   stopifnot(all(sapply(list_summary_func, is.function)))
   #
   stopifnot(is.list(list_comparison_func))
-  stopifnot((length(list_df) - 1) == length(list_comparison_func))
   stopifnot(all(sapply(list_comparison_func, is.function)))
+  stopifnot((length(list_df) - 1) == length(list_comparison_func))
+  #
+  stopifnot(is.list(list_comparison_title))
+  stopifnot(all(sapply(list_comparison_title, is.character)))
+  stopifnot(length(list_comparison_func) == length(list_comparison_title))
   #
   stopifnot(is.null(subject) | subject %in% names(list_df[[1]]))
   stopifnot(is.null(time) | time %in% names(list_df[[1]]))
@@ -106,7 +111,11 @@ make_flowchart <- function(
     # storing df1 and df2 into environment to use them with .filter_args_and_call
     df1 <- list_df[[i]]
     df2 <- list_df[[i + 1]]
-    comp <- .filter_args_and_call(comp_func, environment())
+    comp <- sprintf(
+      "%s\n\n%s",
+      list_comparison_title[[i]],
+      .filter_args_and_call(comp_func, environment())
+    )
     edges_texts <- c(edges_texts, comp)
   }
   #

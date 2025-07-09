@@ -25,6 +25,7 @@ test_that("basic workflow", {
     list_df = list(data0, data1, data2),
     list_summary_func = list(summarize, summarize, summarize),
     list_comparison_func = list(task1, task2),
+    list_comparison_title = list("TASK1", "TASK2"),
     subject = "Chick",
     time = "Time",
     output_svg_file = "test-flowchart.svg"

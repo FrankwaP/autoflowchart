@@ -44,26 +44,21 @@ task1 <- list_outliers_as_na
 data2 <- data1
 data2 <- data2[complete.cases(data2), ]
 # creating the task
-task2 <- combine_func(
+task2 <- combine_comparaisons(
   list_removed_observations,
   list_removed_subjects,
   count_na_removed_observations
 )
 
 ## function to summarize the information of a dataset
-summarize <- function(df) {
-  n_ind <- length(unique(df$ID))
-  n_row <- nrow(df)
-  n_val <- sum(!is.na(df))
-  output <- sprintf("Nind=%d\nNobs=%d\nNval=%d", n_ind, n_row, n_val)
-  return(output)
-}
+summarize <- combine_summaries(summarize_nb_subjects, summarize_nb_observations)
 
 # Generating the flowchart
 make_flowchart(
   list_df = list(data0, data1, data2),
   list_summary_func = list(summarize, summarize, summarize),
   list_comparison_func = list(task1, task2),
+  list_comparison_title = list("TASK1", "TASK2"),
   subject = "Chick",
   time = "Time",
   output_svg_file = "test-flowchart.svg"
