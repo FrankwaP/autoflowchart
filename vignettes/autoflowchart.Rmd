@@ -53,24 +53,24 @@ Here is a basic example:
 ## original dataset ----
 data0 <- ChickWeight
 
-## removing "outliers" ----
+#
+title1 <- "remove outliers"
+task1 <- compare_after_outliers_removal
 data1 <- data0
 idx <- (data1[["weight"]] < 50) | (data1[["weight"]] > 300)
 data1[idx, "weight"] <- NA
-# creating the task
-task1 <- list_outliers_as_na
-
-## remove incomplete observations ----
+#
+title2 <- "remove incomplete observations"
+task2 <- combine_comparaisons(
+  compare_incomplete_observations,
+  compare_subjects,
+  compare_columns_with_na
+)
 data2 <- data1
 data2 <- data2[complete.cases(data2), ]
-# creating the task
-task2 <- combine_comparaisons(
-  list_removed_observations,
-  list_removed_subjects,
-  count_na_removed_observations
-)
 
-## function to summarize the information of a dataset
+
+# function to summarize the information of a dataset
 summarize <- combine_summaries(summarize_nb_subjects, summarize_nb_observations)
 
 # Generating the flowchart
@@ -78,7 +78,7 @@ make_flowchart(
   list_df = list(data0, data1, data2),
   list_summary_func = list(summarize, summarize, summarize),
   list_comparison_func = list(task1, task2),
-  list_comparison_title = list("TASK1", "TASK2"),
+  list_comparison_title = list(title1, title2),
   subject = "Chick",
   time = "Time",
   output_svg_file = "test-flowchart.svg"

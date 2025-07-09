@@ -5,15 +5,15 @@ test_that("basic workflow", {
   data1 <- data0
   idx <- (data1[["weight"]] < 50) | (data1[["weight"]] > 300)
   data1[idx, "weight"] <- NA
-  task1 <- list_outliers_as_na
+  task1 <- compare_after_outliers_removal
 
   # remove incomplete observations
   data2 <- data1
   data2 <- data2[complete.cases(data2), ]
   task2 <- combine_comparaisons(
-    list_removed_observations,
-    list_removed_subjects,
-    count_na_removed_observations
+    compare_observations,
+    compare_subjects,
+    compare_columns_with_na
   )
 
   summarize <- combine_summaries(

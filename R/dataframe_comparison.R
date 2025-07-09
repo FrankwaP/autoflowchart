@@ -15,45 +15,106 @@ combine_comparaisons <- function(...) {
 
 
 # variables modifications ----
-list_removed_columns <- function(df1, df2) {
+
+.compare_columns <- function(df1, df2, added_or_removed) {
   diff <- setdiff(names(df1), names(df2))
   if (length(diff)) {
     return(sprintf(
-      "%d columns removed:\n%s\n",
+      "%d columns %s:\n%s\n",
+      added_or_removed,
       length(diff),
       .print_character_vector(diff)
     ))
   }
 }
 
+compare_columns <- function(df1, df2) {
+  output <- c(
+    .compare_columns(df1, df2, "removed"),
+    .compare_columns(df2, df1, "added")
+  )
+  return(paste(output, collapse = "\n"))
+}
+
+
 # subject modifications ----
-list_removed_subjects <- function(df1, df2, subject) {
-  stopifnot(subject %in% names(df1))
-  stopifnot(subject %in% names(df2))
+.compare_subjects <- function(df1, df2, subject, added_or_removed) {
   diff <- setdiff(df1[, subject], df2[, subject])
   if (length(diff)) {
     return(sprintf(
-      "%d subjects removed:\n%s\n",
+      "%d subjects %s:\n%s\n",
       length(diff),
+      added_or_removed,
       .print_character_vector(diff)
     ))
   }
+}
+
+
+compare_subjects <- function(df1, df2, subject) {
+  stopifnot(subject %in% names(df1))
+  stopifnot(subject %in% names(df2))
+  output <- c(
+    .compare_subjects(df1, df2, subject, "removed"),
+    .compare_subjects(df2, df1, subject, "added")
+  )
+  return(paste(output, collapse = "\n"))
 }
 
 
 # observations modifications ----
-list_removed_observations <- function(df1, df2) {
+.compare_observations <- function(df1, df2, added_or_removed) {
   diff <- setdiff(rownames(df1), rownames(df2))
   if (length(diff)) {
     return(sprintf(
-      "%d observations removed\n",
-      length(diff)
+      "%d observations %s\n",
+      length(diff),
+      added_or_removed
     ))
   }
 }
 
 
-count_na_removed_observations <- function(df1, df2) {
+compare_observations <- function(df1, df2) {
+  incomp1 <- df1[!complete.cases(df1), ]
+  incomp2 <- df1[!complete.cases(df2), ]
+  #
+  output <- c(
+    .compare_observations(df1, df2, "removed"),
+    .compare_observations(df2, df1, "added")
+  )
+  return(paste(output, collapse = "\n"))
+}
+
+
+# incomplete observations modifications ----
+
+.compare_incomplete_observations <- function(df1, df2, added_or_removed) {
+  diff <- setdiff(rownames(df1), rownames(df2))
+  if (length(diff)) {
+    return(sprintf(
+      "%d incomplete observations %s\n",
+      length(diff),
+      added_or_removed
+    ))
+  }
+}
+
+
+compare_incomplete_observations <- function(df1, df2) {
+  df1 <- df1[!complete.cases(df1), ]
+  df2 <- df2[!complete.cases(df2), ]
+  #
+  output <- c(
+    .compare_incomplete_observations(df1, df2, "removed"),
+    .compare_incomplete_observations(df2, df1, "added")
+  )
+  return(paste(output, collapse = "\n"))
+}
+
+
+# ----
+compare_columns_with_na <- function(df1, df2) {
   rem_df <- df1[setdiff(rownames(df1), rownames(df2)), ]
   out <- colSums(is.na(rem_df))
   out <- out[out != 0]
@@ -92,7 +153,7 @@ count_na_removed_observations <- function(df1, df2) {
 }
 
 
-list_outliers_as_na <- function(df1, df2) {
+compare_after_outliers_removal <- function(df1, df2) {
   df_diff <- .which_modif_vals_as_na(df1, df2)
   sum_diff <- colSums(df_diff)
   col_diff <- names(sum_diff[sum_diff != 0])
@@ -112,12 +173,4 @@ list_outliers_as_na <- function(df1, df2) {
     }
     return(paste(output, collapse = "\n"))
   }
-}
-
-# stats about modifications
-count_outliers_as_na <- function(df1, df2) {
-  df_diff <- .which_modif_vals_as_na(df1, df2)
-  out <- colSums(df_diff)
-  out <- out[out != 0]
-  return(sprintf("NA values: \n%s", .print_numeric_vector(out)))
 }

@@ -33,7 +33,7 @@
 <g id="node4" class="node">
 <title>SIDE1</title>
 <polygon fill="none" stroke="black" points="575.5,-254.5 282.5,-254.5 282.5,-185.5 575.5,-185.5 575.5,-254.5"/>
-<text text-anchor="middle" x="429" y="-239.3" font-family="Times,serif" font-size="14.00">TASK1</text>
+<text text-anchor="middle" x="429" y="-239.3" font-family="Times,serif" font-size="14.00">remove outliers</text>
 <text text-anchor="middle" x="429" y="-208.3" font-family="Times,serif" font-size="14.00">Ouliers changed as NA:</text>
 <text text-anchor="middle" x="429" y="-193.3" font-family="Times,serif" font-size="14.00">	weight: [35, ..., 49], [303, ..., 373]</text>
 </g>
@@ -60,8 +60,8 @@
 <g id="node5" class="node">
 <title>SIDE2</title>
 <polygon fill="none" stroke="black" points="582,-149 276,-149 276,-3 582,-3 582,-149"/>
-<text text-anchor="middle" x="429" y="-133.8" font-family="Times,serif" font-size="14.00">TASK2</text>
-<text text-anchor="middle" x="429" y="-102.8" font-family="Times,serif" font-size="14.00">93 observations removed</text>
+<text text-anchor="middle" x="429" y="-133.8" font-family="Times,serif" font-size="14.00">remove incomplete observations</text>
+<text text-anchor="middle" x="429" y="-102.8" font-family="Times,serif" font-size="14.00">93 incomplete observations removed</text>
 <text text-anchor="middle" x="429" y="-71.8" font-family="Times,serif" font-size="14.00">1 subjects removed:</text>
 <text text-anchor="middle" x="429" y="-56.8" font-family="Times,serif" font-size="14.00">18</text>
 <text text-anchor="middle" x="429" y="-25.8" font-family="Times,serif" font-size="14.00">NA values in the removed observations: </text>
