@@ -48,19 +48,23 @@
 }
 
 
-.filter_args_and_call <- function(f, env) {
-  # trick to handle function without subject and time argument
-  env_list <- as.list(env)
-  func_arg_names <- formalArgs(f)
-  sdiff <- setdiff(func_arg_names, names(env_list))
-  if (length(sdiff)) {
+.filter_args_and_call <- function(func, ...) {
+  # handle functions with/without subject and time as argument
+  stopifnot(is.function(func))
+  cl <- match.call()
+  params <- list(...)
+  func_arg_names <- formalArgs(func)
+  filtered_params <- params[func_arg_names]
+  filtered_params <- filtered_params[!is.null(filtered_params)] # normally just 'time' can be filtered
+  if (!setequal(func_arg_names, names(filtered_params))) {
     stop(sprintf(
-      "The following arguments names are not supposed to be used: %s",
-      sdiff
+      "The function '%s' has '%s' as arguments, but should use one of '%s'",
+      cl$func,
+      func_arg_names,
+      params
     ))
   }
-  stopifnot(all(func_arg_names %in% names(env_list)))
-  out <- do.call(f, env_list[func_arg_names])
+  out <- do.call(func, filtered_params)
   stopifnot(is.character(out) | is.null(out))
   return(out)
 }

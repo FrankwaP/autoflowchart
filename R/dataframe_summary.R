@@ -1,11 +1,14 @@
 # combining functions ----
 combine_summaries <- function(...) {
-  func <- function(df, subject = NULL, time = NULL) {
+  func <- function(df, subject, time = NULL) {
     output <- c()
-    for (f in list(...)) {
-      stopifnot(is.function(f))
-      stopifnot(all(formalArgs(f) %in% c("df", "subject", "time")))
-      out <- .filter_args_and_call(f, environment())
+    for (func in list(...)) {
+      out <- .filter_args_and_call(
+        func,
+        df = df,
+        subject = subject,
+        time = time
+      )
       output <- c(output, out)
     }
     return(paste(output, collapse = "\n"))
@@ -15,6 +18,7 @@ combine_summaries <- function(...) {
 
 # function…
 summarize_nb_subjects <- function(df, subject) {
+  stopifnot(subject %in% names(df))
   n_ind <- length(unique(df[[subject]]))
   return(sprintf("Nind=%d", n_ind))
 }

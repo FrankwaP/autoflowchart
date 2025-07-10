@@ -27,11 +27,11 @@ To use it, download this repo then use:
 - or clone this repo and use `devtool::load_all("LOCAL_PATH_TO_THE_REPO")` (easier to debug or add modifications).
 
 It writes down a [Graphviz](https://graphviz.org/) .dot file and call Graphviz.
-So it must be installed and the `dot` command must exist in your system's `PATH`.
+So Graphviz. must be installed and the `dot` command must exist in your system's `PATH`.
 
 It considers:
  - the main branch, for which summaries of the datasets at each step are displayed
- - the side nodes, for which summaries of the modifications at each step are displayed
+ - the side nodes, for which comparisons between the old and new datasets are displayed
 
 The summaries are obtained using functions which:
  - return a string or `NULL`
@@ -42,9 +42,6 @@ The summaries are obtained using functions which:
 Some functions are already coded, but you can defined yours as long as they respect these constraints.
 
 Here is a basic example:
-
-```{r}
-```
 
 
 ```{r}
@@ -73,7 +70,7 @@ data2 <- data2[complete.cases(data2), ]
 # function to summarize the information of a dataset
 summarize <- combine_summaries(summarize_nb_subjects, summarize_nb_observations)
 
-# Generating the flowchart
+# Generating the flowchart ----
 make_flowchart(
   list_df = list(data0, data1, data2),
   list_summary_func = list(summarize, summarize, summarize),

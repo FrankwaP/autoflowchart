@@ -1,11 +1,15 @@
 # combining functions ----
 combine_comparaisons <- function(...) {
-  func <- function(df1, df2, subject = NULL, time = NULL) {
+  func <- function(df1, df2, subject, time = NULL) {
     output <- c()
     for (f in list(...)) {
-      stopifnot(is.function(f))
-      stopifnot(all(formalArgs(f) %in% c("df1", "df2", "subject", "time")))
-      out <- .filter_args_and_call(f, environment())
+      out <- .filter_args_and_call(
+        f,
+        df1 = df1,
+        df2 = df2,
+        subject = subject,
+        time = time
+      )
       output <- c(output, out)
     }
     return(paste(output, collapse = "\n"))
@@ -39,7 +43,7 @@ compare_columns <- function(df1, df2) {
 
 # subject modifications ----
 .compare_subjects <- function(df1, df2, subject, added_or_removed) {
-  diff <- setdiff(df1[, subject], df2[, subject])
+  diff <- setdiff(df1[[subject]], df2[[subject]])
   if (length(diff)) {
     return(sprintf(
       "%d subjects %s:\n%s\n",

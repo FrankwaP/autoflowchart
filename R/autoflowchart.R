@@ -71,7 +71,7 @@ make_flowchart <- function(
   list_summary_func,
   list_comparison_func,
   list_comparison_title,
-  subject = NULL,
+  subject,
   time = NULL,
   output_svg_file
 ) {
@@ -99,22 +99,31 @@ make_flowchart <- function(
   nodes_texts <- c()
   for (i in seq_along(list_summary_func)) {
     summary_func <- list_summary_func[[i]]
-    # storing df into environment to use them with .filter_args_and_call
     df <- list_df[[i]]
-    summary_ <- .filter_args_and_call(summary_func, environment())
+    summary_ <- .filter_args_and_call(
+      summary_func,
+      df = df,
+      subject = subject,
+      time = time
+    )
     nodes_texts <- c(nodes_texts, summary_)
   }
   #
   edges_texts <- c()
   for (i in seq_along(list_comparison_func)) {
     comp_func <- list_comparison_func[[i]]
-    # storing df1 and df2 into environment to use them with .filter_args_and_call
     df1 <- list_df[[i]]
     df2 <- list_df[[i + 1]]
     comp <- sprintf(
       "%s\n\n%s",
       list_comparison_title[[i]],
-      .filter_args_and_call(comp_func, environment())
+      .filter_args_and_call(
+        comp_func,
+        df1 = df1,
+        df2 = df2,
+        subject = subject,
+        time = time
+      )
     )
     edges_texts <- c(edges_texts, comp)
   }
