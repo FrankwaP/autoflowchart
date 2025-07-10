@@ -37,7 +37,7 @@ compare_columns <- function(df1, df2) {
     .compare_columns(df1, df2, "removed"),
     .compare_columns(df2, df1, "added")
   )
-  return(paste(output, collapse = "\n"))
+  return(paste(output, collapse = ""))
 }
 
 
@@ -62,7 +62,7 @@ compare_subjects <- function(df1, df2, subject) {
     .compare_subjects(df1, df2, subject, "removed"),
     .compare_subjects(df2, df1, subject, "added")
   )
-  return(paste(output, collapse = "\n"))
+  return(paste(output, collapse = ""))
 }
 
 
@@ -87,7 +87,7 @@ compare_observations <- function(df1, df2) {
     .compare_observations(df1, df2, "removed"),
     .compare_observations(df2, df1, "added")
   )
-  return(paste(output, collapse = "\n"))
+  return(paste(output, collapse = ""))
 }
 
 
@@ -113,7 +113,7 @@ compare_incomplete_observations <- function(df1, df2) {
     .compare_incomplete_observations(df1, df2, "removed"),
     .compare_incomplete_observations(df2, df1, "added")
   )
-  return(paste(output, collapse = "\n"))
+  return(paste(output, collapse = ""))
 }
 
 
