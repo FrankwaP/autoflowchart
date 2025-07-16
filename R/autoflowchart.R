@@ -1,23 +1,51 @@
-.dot_subgraphs <- function(texts, prefix, edge_style) {
-  output <- c()
+FAKE_PREFIX <- "FAKE"
+SUMM_PREFIX <- "SUMMARY"
+COMP_PREFIX <- "COMPARAISON"
+
+.dot_subgraphs <- function(texts, prefix, edge_style, add_fake_steps) {
+  stopifnot(prefix %in% c(SUMM_PREFIX, COMP_PREFIX))
+  node_list <- c()
   step_list <- c()
+  # nodes
   for (inode in seq_along(texts)) {
     step_name <- sprintf("%s%d", prefix, inode)
     step_list <- c(step_list, step_name)
     node_text <- texts[inode]
-    output <- c(
-      output,
+    node_list <- c(
+      node_list,
       sprintf("%s[label=\"%s\"]", step_name, node_text)
     )
+    if (add_fake_steps && inode != length(texts)) {
+      fake_step_name <- sprintf("%s%d", FAKE_PREFIX, inode)
+      step_list <- c(step_list, fake_step_name)
+      node_list <- c(
+        node_list,
+        sprintf("%s[shape=point]", fake_step_name)
+      )
+    }
   }
-  links <- paste(step_list, collapse = " -> ")
+  # links
+  link_list <- c()
+  for (istep in seq_along(step_list)[-length(step_list)]) {
+    node1 <- step_list[[istep]]
+    node2 <- step_list[[istep + 1]]
+    if (startsWith(node2, FAKE_PREFIX)) {
+      link_list <- c(
+        link_list,
+        sprintf("%s -> %s [arrowhead=none]", node1, node2)
+      )
+    } else {
+      link_list <- c(link_list, sprintf("%s -> %s", node1, node2))
+    }
+  }
+  # final
   output <- c(
-    output,
+    node_list,
     sprintf("subgraph notcluster%s {", prefix),
     "style=\"invis\";",
     "rank=same;",
     sprintf("edge [style=\"%s\"]", edge_style),
-    paste0(links, ";"),
+    link_list,
     "}"
   )
   return(output)
@@ -26,8 +54,8 @@
 .dot_vertical_alignment <- function(sides_texts, nodes_prefix, sides_prefix) {
   output <- c()
   for (iside in seq_along(sides_texts)) {
-    node_name <- sprintf("%s%d", nodes_prefix, iside)
-    side_name <- sprintf("%s%d", sides_prefix, iside)
+    node_name <- sprintf("%s%d", FAKE_PREFIX, iside)
+    side_name <- sprintf("%s%d", COMP_PREFIX, iside)
     output <- c(
       output,
       paste(c(node_name, side_name), collapse = " -> "),
@@ -48,10 +76,29 @@
     "node [shape=box];"
   )
   #
-  output <- c(output, .dot_subgraphs(nodes_texts, "STEP", edge_style = "solid"))
-  output <- c(output, .dot_subgraphs(sides_texts, "SIDE", edge_style = "invis"))
+  output <- c(
+    output,
+    .dot_subgraphs(
+      nodes_texts,
+      SUMM_PREFIX,
+      edge_style = "solid",
+      add_fake_steps = TRUE
+    )
+  )
+  output <- c(
+    output,
+    .dot_subgraphs(
+      sides_texts,
+      COMP_PREFIX,
+      edge_style = "invis",
+      add_fake_steps = FALSE
+    )
+  )
   # for vertical alignement
-  output <- c(output, .dot_vertical_alignment(sides_texts, "STEP", "SIDE"))
+  output <- c(
+    output,
+    .dot_vertical_alignment(sides_texts, SUMM_PREFIX, COMP_PREFIX)
+  )
   #
   output <- c(output, "}")
   return(paste(output, collapse = "\n"))
