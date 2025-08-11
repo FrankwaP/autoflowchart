@@ -25,8 +25,8 @@ combine_comparaisons <- function(...) {
   if (length(diff)) {
     return(sprintf(
       "%d columns %s:\n%s\n",
-      added_or_removed,
       length(diff),
+      added_or_removed,
       .print_character_vector(diff)
     ))
   }
