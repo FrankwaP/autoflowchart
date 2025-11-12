@@ -9,18 +9,22 @@ To use it, download this repo then use: - install it using
 or clone this repo and use `devtool::load_all("LOCAL_PATH_TO_THE_REPO")`
 (easier to debug or add modifications).
 
-It writes down a [Graphviz](https://graphviz.org/) .dot file and call
-Graphviz. So Graphviz. must be installed and the `dot` command must
+It writes down a [Graphviz](https://graphviz.org/) `.dot` file and calls
+Graphviz. So Graphviz must be installed and the `dot` command must
 exist in your system’s `PATH`.
 
-It considers: - the main branch, for which summaries of the datasets at
-each step are displayed - the side nodes, for which comparisons between
-the old and new datasets are displayed
+It considers:
+
+- the main branch, for which summaries of the datasets at
+each step are displayed,  
+- the side nodes, for which comparisons between
+the old and new datasets are displayed.
 
 The summaries are obtained using functions which: - return a string or
-`NULL` - uses specific arguments: - for the datasets summaries: `df` and
-optionally `subject` and `time` - for the modifications summaries:
-`df1`, `df2` and optionally `subject` and `time`
+`NULL` - uses specific arguments:
+
+- for the datasets summaries: `df` and optionally `subject` and `time`  
+- for the modifications summaries: `df1`, `df2` and optionally `subject` and `time`  
 
 Some functions are already coded, but you can defined yours as long as
 they respect these constraints.
